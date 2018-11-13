@@ -1,0 +1,5 @@
+Fable.Core
+Fable.Import.Jest
+
+group netcorebuild
+    dotnet-fable
