@@ -4,6 +4,10 @@ This template setup a minimal application using [Fable](http://fable.io/), [Elmi
 
 ## How to use ?
 
+### Axxes
+
+>.\fake.cmd run .\build.fsx -t Watch
+
 ### Architecture
 
 - Entry point of your application is `src/App.fs`

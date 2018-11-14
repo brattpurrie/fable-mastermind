@@ -27,24 +27,40 @@ Target.create "YarnInstall" (fun _ ->
     Yarn.install id
 )
 
-Target.create "Build" (fun _ ->
+let runDotNet cmd workingDir =
     let result =
-        DotNet.exec
-            (DotNet.Options.withWorkingDirectory __SOURCE_DIRECTORY__)
-            "fable"
-            "webpack --port free -- -p"
+        DotNet.exec (DotNet.Options.withWorkingDirectory workingDir) cmd ""
+    if result.ExitCode <> 0 then failwithf "'dotnet %s' failed in %s" cmd workingDir
 
-    if not result.OK then failwithf "dotnet fable failed with code %i" result.ExitCode
+Target.create "Build" (fun _ ->
+    runDotNet "fable webpack --port free -- -p" __SOURCE_DIRECTORY__
 )
 
 Target.create "Watch" (fun _ ->
-    let result =
-        DotNet.exec
-            (DotNet.Options.withWorkingDirectory __SOURCE_DIRECTORY__)
-            "fable"
-            "webpack-dev-server --port free"
+    let webpackDevServer =
+        async {
+            runDotNet "fable webpack-dev-server --port free" __SOURCE_DIRECTORY__
+        }
 
-    if not result.OK then failwithf "dotnet fable failed with code %i" result.ExitCode
+    let fableTestWatch =
+        async {
+            runDotNet "fable yarn-run build-test --port free -- --watch" __SOURCE_DIRECTORY__
+        }
+
+    let jestWatch =
+        async {
+            Yarn.exec "test --watchAll" id
+        }
+
+    [webpackDevServer;fableTestWatch;jestWatch]
+    |> Async.Parallel
+    |> Async.RunSynchronously
+    |> ignore
+)
+
+Target.create "Tests" (fun _ ->
+    runDotNet "fable yarn-run build-test --port free" __SOURCE_DIRECTORY__
+    Yarn.exec "test" id
 )
 
 // Build order
@@ -54,6 +70,9 @@ Target.create "Watch" (fun _ ->
     ==> "Build"
 
 "Watch"
+    <== [ "YarnInstall" ]
+
+"Tests"
     <== [ "YarnInstall" ]
 
 // start build

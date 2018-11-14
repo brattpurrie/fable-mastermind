@@ -8,8 +8,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "split": "fable-splitter --watch --config splitter.config.js",
-    "test": "jest --watchAll"
+    "build-test": "fable-splitter --config splitter.config.js",
+    "test": "jest"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
