@@ -1,6 +1,5 @@
 const path = require("path");
 const webpack = require("webpack");
-const fableUtils = require("fable-utils");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -108,5 +107,28 @@ module.exports = {
                 use: ["file-loader"]
             }
         ]
+    }
+},
+{
+    entry: "./test/test.fsproj",
+    module: {
+        rules: [
+            {
+                test: /\.fs(x|proj)?$/,
+                use: {
+                    loader: "fable-loader",
+                    options: {
+                        define: isProduction ? [] : ["DEBUG"]
+                    }
+                }
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: babelOptions
+                },
+            }]
     }
 };

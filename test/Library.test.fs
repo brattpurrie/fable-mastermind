@@ -1,6 +1,7 @@
 ﻿module MasterMind.Test
 open Fable.Import.Jest (*jest = testing framework*)
-open App.View
+open App.Types
+open App.State
 
 test "Init Should Not Be Null" <| fun () ->
     let model = init()
