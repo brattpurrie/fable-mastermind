@@ -2,6 +2,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- FS0025: Incomplete pattern matches on this expression. -->
+    <WarningsAsErrors>25</WarningsAsErrors>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Types.fs" />
     <Compile Include="State.fs" />

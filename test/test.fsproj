@@ -6,6 +6,10 @@
   <ItemGroup>
     <Compile Include="Library.test.fs" />
   </ItemGroup>
+  <PropertyGroup>
+    <!-- FS0025: Incomplete pattern matches on this expression. -->
+    <WarningsAsErrors>25</WarningsAsErrors>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\MasterMind.fsproj" />
   </ItemGroup>

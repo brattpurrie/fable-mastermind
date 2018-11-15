@@ -2,3 +2,36 @@ $fa-font-path: "./../../node_modules/font-awesome/fonts/";
 @import './../../node_modules/font-awesome/scss/font-awesome.scss';
 
 @import './../../node_modules/bulma/bulma.sass';
+
+.pointer {
+  cursor: pointer;
+}
+
+.color {
+  display: inline-block;
+  margin: 15px;
+}
+
+.red {
+  color:red;
+}
+
+.blue {
+  color:blue;
+}
+
+.green {
+  color:green;
+}
+
+.yellow {
+  color:yellow;
+}
+
+.orange {
+  color: orange;
+}
+
+.violet {
+  color: violet;
+}
