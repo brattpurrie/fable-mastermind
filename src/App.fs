@@ -38,22 +38,45 @@ let renderColor dispatch idx color =
     
 
 let currentAttemptForm model dispatch =
-    tupleToList model.CurrentAttempt
-    |> Option.map (fun colors ->
-        colors
-        |> List.mapi (fun idx color ->
-            renderColor dispatch idx color
+    let colorInput =
+        tupleToList model.CurrentAttempt
+        |> Option.map (fun colors ->
+            colors
+            |> List.mapi (fun idx color ->
+                renderColor dispatch idx color
+            )
+            |> ofList
         )
-        |> ofList
-    )
-    |> ofOption
+        |> ofOption
+    
+    form [OnSubmit (fun ev -> ev.preventDefault())] [
+        colorInput
+        Button.button [ Button.Color IsPrimary
+                        Button.OnClick (fun _ -> dispatch SubmitAttempt) ] [str "Submit"]
+    ]
+
+let gameOverScreen dispatch =
+    Hero.hero [Hero.IsFullHeight; Hero.Color IsPrimary] [
+       Hero.body [] [
+           Container.container [ Container.Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ] ] [
+               Heading.h1 [Heading.Is1] [str "Game over"]
+               Button.button [ Button.Color IsBlack
+                               Button.OnClick (fun _ -> dispatch ResetGame) ] [str "Reset game"]
+           ]
+       ]
+    ]
 
 let private view model dispatch =
     // div (*function*) List.empty (*collection of attributes for div*) List.empty (*collection of childs inside div*)
-    Container.container [ Container.IsFluid ] [
-        div [] [] // previous attempt
-        currentAttemptForm model dispatch
-    ]
+    let isGameOver = List.length model.Attempts = MaxAttempts
+    
+    if isGameOver then
+        gameOverScreen dispatch
+    else
+        Container.container [ Container.IsFluid ] [
+            div [] [] // previous attempt
+            currentAttemptForm model dispatch
+        ]
 
 open Elmish.React
 open Elmish.Debug
@@ -62,6 +85,7 @@ open Elmish.HMR
 Program.mkSimple init update view
 |> Program.withReactUnoptimized "elmish-app"
 #if DEBUG
-|> Program.withDebugger
+// |> Program.withDebugger
+|> Program.withConsoleTrace
 #endif
 |> Program.run

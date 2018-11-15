@@ -35,3 +35,10 @@ test "Third color should change" <| fun () ->
     let (_,_, orange, _) = model'.CurrentAttempt
     orange == Orange
     
+test "Submitted attempt should be added" <| fun () ->
+        let model' = update SubmitAttempt initial
+        List.length model'.Attempts == 1
+
+test "Reset should return to initial state" <| fun () ->
+        let reset = update ResetGame initial
+        reset == initial

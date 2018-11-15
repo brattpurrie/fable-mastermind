@@ -5,7 +5,7 @@ open App.Types
 let init _ =
     {
         CurrentAttempt = Color.Red, Color.Red, Color.Red, Color.Red
-        Attempts =  List.empty
+        Attempts = List.empty
     }
     
 let colors = [| Red ; Green ; Blue ; Yellow ; Orange ; Violet |]
@@ -34,3 +34,8 @@ let update msg model =
             
             
         { model with CurrentAttempt = currentAttempt }
+          
+    | SubmitAttempt ->
+        { model with Attempts = model.CurrentAttempt::model.Attempts }
+          
+    | ResetGame -> init()

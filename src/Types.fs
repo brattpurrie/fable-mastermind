@@ -18,3 +18,7 @@ type Model =
 
 type Msg =
     | ChangeColor of int // position in current attempt
+    | SubmitAttempt
+    | ResetGame
+    
+let [<Literal>] MaxAttempts = 10
