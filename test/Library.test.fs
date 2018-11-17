@@ -1,26 +1,44 @@
 ﻿module MasterMind.Test
+
 open Fable.Import.Jest (*jest = testing framework*)
+open Fable.Import.Jest.Matchers
 open App.Types
 open App.State
 
+let initial = init()
+
 test "Init Should Not Be Null" <| fun () ->
-    let model = init()
-    expect.Invoke(model).not.toBeNull()
+    expect.Invoke(initial).not.toBeNull()
 
 test "Init Should be 4x Red"  <| fun () ->
     let model = init()
-    let expectedModel = {
-        CurrentAttempt = Color.Red, Color.Red, Color.Red, Color.Red
-        Attempts =  List.empty
-    }
+    match model.CurrentAttempt with
+    | Red, Red, Red, Red -> ()
+    | _ -> failwith "Unexpected attempt"
+    
+test "Change color should take the next color" <| fun () ->
+    let model' = update (Msg.ChangeColor 0) initial
+    
+    match model'.CurrentAttempt with
+    | Green, Red, Red, Red -> ()
+    | _ -> failwithf "First color should be red"
+    
 
-    expect.Invoke(model).toEqual(expectedModel)
+test "Change color should take max index into account" <| fun () ->
+    let model = { initial with CurrentAttempt = Violet, Red, Red, Red }
+    let model' = update (Msg.ChangeColor 0) model
+    initial.CurrentAttempt == model'.CurrentAttempt // (==) same as expect.Invoke(initial.CurrentAttempt).toEqual(model'.CurrentAttempt)
+    
+test "Third color should change" <| fun () ->
+    let model = { initial with CurrentAttempt = Red, Red, Yellow, Red }
+    let model' = update (Msg.ChangeColor 2) model
+    let (_,_, orange, _) = model'.CurrentAttempt
+    orange == Orange
+    
+test "Submitted attempt should be added" <| fun () ->
+        let model' = update SubmitAttempt initial
+        List.length model'.Attempts == 1
 
-// test "Init Should not be 4x Red"  <| fun () ->
-//     let model = init()
-//     let expectedModel = {
-//         CurrentAttempt = Color.Red, Color.Red, Color.Red, Color.Red
-//         Attempts =  List.empty
-//     }
-
-//     expect.Invoke(model).toEqual(expectedModel)
+test "Reset should return to initial state" <| fun () ->
+        let reset = update ResetGame initial
+        reset == initial
