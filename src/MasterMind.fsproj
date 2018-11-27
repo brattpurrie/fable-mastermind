@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Types.fs" />
+    <Compile Include="Selector.fs" />
     <Compile Include="State.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>

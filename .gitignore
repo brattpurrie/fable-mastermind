@@ -10,3 +10,6 @@ bin/
 output/
 .fake/
 temp/
+.vs/
+.idea/
+MasterMind.sln.DotSettings.user

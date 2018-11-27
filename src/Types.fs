@@ -8,17 +8,24 @@ type Color = // enum
     | Orange
     | Violet
 
+type Pin =
+    | NoMatch
+    | PartialMatch
+    | FullMatch
+
 type Attempt = Color * Color * Color * Color // Tuple
 
+type Code = Attempt
+
 type Model =
-    {
-        CurrentAttempt : Attempt
-        Attempts : Attempt list // list of Attempt
-    }
+    { ToCrack : Code
+      CurrentAttempt : Attempt
+      Attempts : Attempt list }
 
 type Msg =
     | ChangeColor of int // position in current attempt
     | SubmitAttempt
     | ResetGame
-    
-let [<Literal>] MaxAttempts = 10
+
+[<Literal>]
+let MaxAttempts = 10
